@@ -244,6 +244,7 @@ MainWindow::MainWindow(HantekDsoControl *dsoControl, DsoSettings *settings, Expo
         DsoConfigDialog *configDialog = new DsoConfigDialog(this->mSettings, this);
         configDialog->setModal(true);
         configDialog->show();
+        connect(configDialog, SIGNAL(newSettings()), dsoWidget, SLOT(updateSettings()));
     });
 
     connect(this->ui->actionDigital_phosphor, &QAction::toggled, [this](bool enabled) {

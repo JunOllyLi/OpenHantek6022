@@ -40,6 +40,8 @@ if("${CMAKE_SYSTEM}" MATCHES "Linux")
   if(EXISTS "/lib/udev/rules.d/")
     install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/udev_rules/60-hantek.rules"
       DESTINATION "/lib/udev/rules.d/" COMPONENT Runtime)
+    install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/udev_rules/60-sainsmart.rules"
+      DESTINATION "/lib/udev/rules.d/" COMPONENT Runtime)
   else()
     message(WARNING "Could not find udev rules directory (/lib/udev/rules.d/), skipping installation of udev rules.")
   endif()

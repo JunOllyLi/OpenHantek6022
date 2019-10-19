@@ -40,9 +40,21 @@ DsoConfigScopePage::DsoConfigScopePage(DsoSettings *settings, QWidget *parent) :
     cursorsGroup = new QGroupBox(tr("Cursors"));
     cursorsGroup->setLayout(cursorsLayout);
 
+    slidersLabel = new QLabel(tr("Large size"));
+    slidersCheckBox = new QCheckBox();
+    slidersCheckBox->setChecked(settings->view.largeSliders);
+
+    slidersLayout = new QGridLayout();
+    slidersLayout->addWidget(slidersLabel, 0, 0);
+    slidersLayout->addWidget(slidersCheckBox, 0, 1);
+
+    slidersGroup = new QGroupBox(tr("Sliders"));
+    slidersGroup->setLayout(slidersLayout);
+
     mainLayout = new QVBoxLayout();
     mainLayout->addWidget(graphGroup);
     mainLayout->addWidget(cursorsGroup);
+    mainLayout->addWidget(slidersGroup);
     mainLayout->addStretch(1);
 
     setLayout(mainLayout);
@@ -53,4 +65,5 @@ void DsoConfigScopePage::saveSettings() {
     settings->view.interpolation = (Dso::InterpolationMode)interpolationComboBox->currentIndex();
     settings->view.digitalPhosphorDepth = digitalPhosphorDepthSpinBox->value();
     settings->view.cursorGridPosition = (Qt::ToolBarArea)cursorsComboBox->currentData().toUInt();
+    settings->view.largeSliders = slidersCheckBox->isChecked();
 }

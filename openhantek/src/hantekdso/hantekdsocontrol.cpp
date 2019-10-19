@@ -174,7 +174,7 @@ std::vector<unsigned char> HantekDsoControl::getSamples(unsigned &previousSample
 
     static unsigned id = 0;
     ++id;
-    timestampDebug(QString("Received packet %1").arg(id));
+    // timestampDebug(QString("Received packet %1").arg(id));
 
     return data;
 }
@@ -797,7 +797,7 @@ void HantekDsoControl::run() {
     if (this->sampling) {
         // Sampling hasn't started, update the expected sample count
         expectedSampleCount = this->getSampleCount();
-        timestampDebug("Starting to capture");
+        // timestampDebug("Starting to capture");
         this->_samplingStarted = true;
     }
     this->updateInterval();

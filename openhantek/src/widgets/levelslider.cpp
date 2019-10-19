@@ -26,6 +26,7 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QWidget>
+#include <QDebug>
 
 #include "levelslider.h"
 
@@ -34,9 +35,14 @@
 /// \brief Initializes the slider container.
 /// \param direction The side on which the sliders are shown.
 /// \param parent The parent widget.
-LevelSlider::LevelSlider(Qt::ArrowType direction, QWidget *parent) : QWidget(parent) {
+LevelSlider::LevelSlider(Qt::ArrowType direction, bool largeSize, QWidget *parent)
+    : QWidget(parent)
+    , doubleClickedSlider(-1)
+    , large(largeSize)
+    , defaultFontSize(font().pointSize())
+{
     QFont font = this->font();
-    font.setPointSize(font.pointSize() * 0.8);
+    font.setPointSize(defaultFontSize * (large ? 1.6 : 0.8));
     this->setFont(font);
 
     this->pressedSlider = -1;
@@ -253,6 +259,20 @@ void LevelSlider::setValue(int index, double value) {
     if (this->pressedSlider < 0) emit valueChanged(index, value);
 }
 
+
+void LevelSlider::setLarge(bool large) {
+    if (this->large == large)
+        return;
+    this->large = large;
+
+    QFont font = this->font();
+    font.setPointSize(defaultFontSize * (large ? 1.6 : 0.8));
+    setFont(font);
+    calculateWidth();
+    repaint();
+}
+
+
 /// \brief Return the direction of the sliders.
 /// \return The side on which the sliders are shown.
 Qt::ArrowType LevelSlider::direction() const { return this->_direction; }
@@ -337,12 +357,31 @@ void LevelSlider::mouseReleaseEvent(QMouseEvent *event) {
         event->ignore();
         return;
     }
-
     emit valueChanged(this->pressedSlider, this->slider[this->pressedSlider]->value);
+    this->doubleClickedSlider = this->pressedSlider;
     this->pressedSlider = -1;
 
     event->accept();
 }
+
+/// \brief Left double click centers the slider
+/// \param event The mouse event that should be handled.
+void LevelSlider::mouseDoubleClickEvent(QMouseEvent *event) {
+    if (!(event->button() & Qt::LeftButton)) {
+        event->ignore();
+        return;
+    }
+
+    if (doubleClickedSlider != -1) {
+        setValue(doubleClickedSlider, (slider[doubleClickedSlider]->maximum +
+                slider[doubleClickedSlider]->minimum)/2); // set to center
+        pressedSlider = -1; // setValue sets pressedSlider, so reset it again
+        doubleClickedSlider = -1;
+        event->accept();
+    } else
+        event->ignore();
+}
+
 
 /// \brief Paint the widget.
 /// \param event The paint event that should be handled.
@@ -533,7 +572,7 @@ QRect LevelSlider::calculateRect(int sliderId) {
 /// \return The calculated width of the slider.
 int LevelSlider::calculateWidth() {
     // At least 12 px for the needles
-    this->sliderWidth = 12;
+    this->sliderWidth = large ? 24 : 12;
 
     // Is it a vertical slider?
     if (this->_direction == Qt::RightArrow || this->_direction == Qt::LeftArrow) {

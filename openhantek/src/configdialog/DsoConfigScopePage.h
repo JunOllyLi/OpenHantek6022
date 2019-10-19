@@ -42,4 +42,9 @@ class DsoConfigScopePage : public QWidget {
     QGridLayout *cursorsLayout;
     QLabel *cursorsLabel;
     QComboBox *cursorsComboBox;
+
+    QGroupBox *slidersGroup;
+    QGridLayout *slidersLayout;
+    QLabel *slidersLabel;
+    QCheckBox *slidersCheckBox;
 };

@@ -12,4 +12,4 @@
 #define MARGIN_RIGHT (DIVS_TIME / 2.0)
 
 #define MARKER_COUNT 2 ///< Number of markers
-#define MARKER_STEP (DIVS_TIME / 100.0)
+#define MARKER_STEP (DIVS_TIME / 1000.0)

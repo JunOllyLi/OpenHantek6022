@@ -311,14 +311,34 @@ void DsoWidget::updateCursorGrid(bool enabled) {
     }
 }
 
+void DsoWidget::updateSettings()
+{
+    mainSliders.offsetSlider->setLarge(view->largeSliders);
+    mainSliders.triggerPositionSlider->setLarge(view->largeSliders);
+    mainSliders.triggerLevelSlider->setLarge(view->largeSliders);
+    mainSliders.markerSlider->setLarge(view->largeSliders);
+    zoomSliders.offsetSlider->setLarge(view->largeSliders);
+    zoomSliders.triggerPositionSlider->setLarge(view->largeSliders);
+    zoomSliders.triggerLevelSlider->setLarge(view->largeSliders);
+    zoomSliders.markerSlider->setLarge(view->largeSliders);
+    for (ChannelID channel = 0; channel < scope->voltage.size(); ++channel) {
+        mainSliders.offsetSlider->setColor(channel, view->screen.voltage[channel]);
+        mainSliders.triggerPositionSlider->setColor(channel, view->screen.voltage[channel]);
+        mainSliders.triggerLevelSlider->setColor(channel, view->screen.voltage[channel]);
+        zoomSliders.offsetSlider->setColor(channel, view->screen.voltage[channel]);
+        zoomSliders.triggerPositionSlider->setColor(channel, view->screen.voltage[channel]);
+        zoomSliders.triggerLevelSlider->setColor(channel, view->screen.voltage[channel]);
+    }
+}
+
 void DsoWidget::setupSliders(DsoWidget::Sliders &sliders) {
     // The offset sliders for all possible channels
-    sliders.offsetSlider = new LevelSlider(Qt::RightArrow);
+    sliders.offsetSlider = new LevelSlider(Qt::RightArrow, view->largeSliders);
     for (ChannelID channel = 0; channel < scope->voltage.size(); ++channel) {
         sliders.offsetSlider->addSlider(scope->voltage[channel].name, channel);
         sliders.offsetSlider->setColor(channel, view->screen.voltage[channel]);
         sliders.offsetSlider->setLimits(channel, -DIVS_VOLTAGE / 2, DIVS_VOLTAGE / 2);
-        sliders.offsetSlider->setStep(channel, 0.2);
+        sliders.offsetSlider->setStep(channel, 0.01);
         sliders.offsetSlider->setValue(channel, scope->voltage[channel].offset);
         sliders.offsetSlider->setIndexVisible(channel, scope->voltage[channel].used);
     }
@@ -326,21 +346,21 @@ void DsoWidget::setupSliders(DsoWidget::Sliders &sliders) {
         sliders.offsetSlider->addSlider(scope->spectrum[channel].name, scope->voltage.size() + channel);
         sliders.offsetSlider->setColor(scope->voltage.size() + channel, view->screen.spectrum[channel]);
         sliders.offsetSlider->setLimits(scope->voltage.size() + channel, -DIVS_VOLTAGE / 2, DIVS_VOLTAGE / 2);
-        sliders.offsetSlider->setStep(scope->voltage.size() + channel, 0.2);
+        sliders.offsetSlider->setStep(scope->voltage.size() + channel, 0.01);
         sliders.offsetSlider->setValue(scope->voltage.size() + channel, scope->spectrum[channel].offset);
         sliders.offsetSlider->setIndexVisible(scope->voltage.size() + channel, scope->spectrum[channel].used);
     }
 
     // The triggerPosition slider
-    sliders.triggerPositionSlider = new LevelSlider(Qt::DownArrow);
+    sliders.triggerPositionSlider = new LevelSlider(Qt::DownArrow, view->largeSliders);
     sliders.triggerPositionSlider->addSlider();
     sliders.triggerPositionSlider->setLimits(0, 0.0, 1.0);
-    sliders.triggerPositionSlider->setStep(0, 0.2 / (double)DIVS_TIME);
+    sliders.triggerPositionSlider->setStep(0, 0.01 / (double)DIVS_TIME);
     sliders.triggerPositionSlider->setValue(0, scope->trigger.position);
     sliders.triggerPositionSlider->setIndexVisible(0, true);
 
     // The sliders for the trigger levels
-    sliders.triggerLevelSlider = new LevelSlider(Qt::LeftArrow);
+    sliders.triggerLevelSlider = new LevelSlider(Qt::LeftArrow, view->largeSliders);
     for (ChannelID channel = 0; channel < spec->channels; ++channel) {
         sliders.triggerLevelSlider->addSlider((int)channel);
         sliders.triggerLevelSlider->setColor(channel,
@@ -353,7 +373,7 @@ void DsoWidget::setupSliders(DsoWidget::Sliders &sliders) {
     }
 
     // The marker slider
-    sliders.markerSlider = new LevelSlider(Qt::UpArrow);
+    sliders.markerSlider = new LevelSlider(Qt::UpArrow, view->largeSliders);
     for (int marker = 0; marker < MARKER_COUNT; ++marker) {
         sliders.markerSlider->addSlider(QString::number(marker + 1), marker);
         sliders.markerSlider->setLimits(marker, MARGIN_LEFT, MARGIN_RIGHT);

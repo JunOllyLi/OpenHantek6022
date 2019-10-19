@@ -134,6 +134,7 @@ void DsoConfigDialog::apply() {
     this->scopePage->saveSettings();
     this->colorsPage->saveSettings();
     this->filePage->saveSettings();
+    emit newSettings();
 }
 
 /// \brief Change the config page.

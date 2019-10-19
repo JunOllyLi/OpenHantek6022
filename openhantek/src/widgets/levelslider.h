@@ -29,7 +29,7 @@ class LevelSlider : public QWidget {
     Q_OBJECT
 
   public:
-    LevelSlider(Qt::ArrowType direction = Qt::RightArrow, QWidget *parent = 0);
+    LevelSlider(Qt::ArrowType direction = Qt::RightArrow, bool largeSize = false, QWidget *parent = 0);
     ~LevelSlider();
 
     QSize sizeHint() const;
@@ -56,6 +56,7 @@ class LevelSlider : public QWidget {
     double setStep(int index, double step);
     double value(int index) const;
     void setValue(int index, double value);
+    void setLarge(bool large);
 
     // Parameters for all sliders
     Qt::ArrowType direction() const;
@@ -65,6 +66,7 @@ class LevelSlider : public QWidget {
     void mouseMoveEvent(QMouseEvent *event);
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
+    void mouseDoubleClickEvent(QMouseEvent *event);
 
     void paintEvent(QPaintEvent *event);
     void resizeEvent(QResizeEvent *event);
@@ -75,12 +77,15 @@ class LevelSlider : public QWidget {
 
     QList<LevelSliderParameters *> slider; ///< The parameters for each slider
     int pressedSlider;                     ///< The currently pressed (moved) slider
+    int doubleClickedSlider;               ///< The double clicked/last pressed (moved) slider
     int sliderWidth;                       ///< The slider width (dimension orthogonal to the sliding
                                            /// direction)
 
     Qt::ArrowType _direction; ///< The direction the sliders point to
     int _preMargin;           ///< The margin before the minimum slider position
     int _postMargin;          ///< The margin after the maximum slider position
+    bool large;
+    int defaultFontSize;
 
   signals:
     void valueChanged(int index, double value); ///< The value of a slider has changed

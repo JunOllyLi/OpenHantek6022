@@ -42,6 +42,7 @@ struct DsoSettingsView {
     Dso::InterpolationMode interpolation = Dso::INTERPOLATION_LINEAR; ///< Interpolation mode for the graph
     bool screenColorImages = false;                                   ///< true exports images with screen colors
     bool zoom = false;                                                ///< true if the magnified scope is enabled
+    bool largeSliders = false;                                        ///< set to true to increase slider size for touch screens
     Qt::ToolBarArea cursorGridPosition = Qt::RightToolBarArea;
     bool cursorsVisible = false;
 

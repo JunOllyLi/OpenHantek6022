@@ -131,6 +131,9 @@ class DsoWidget : public QWidget {
     void updateZoom(bool enabled);
     void updateCursorGrid(bool enabled);
 
+    // apply new config settings
+    void updateSettings();
+
   private slots:
     // Sliders
     void updateOffset(ChannelID channel, double value);
