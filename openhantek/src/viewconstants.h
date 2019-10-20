@@ -12,4 +12,7 @@
 #define MARGIN_RIGHT (DIVS_TIME / 2.0)
 
 #define MARKER_COUNT 2 ///< Number of markers
-#define MARKER_STEP (DIVS_TIME / 1000.0)
+#define MARKER_STEP (DIVS_TIME / 100.0)
+
+// spacing between the individual entries of the docks
+#define DOCK_LAYOUT_SPACING 4
